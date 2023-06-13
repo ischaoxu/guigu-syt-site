@@ -201,14 +201,14 @@ import regionApi from "~/api/cmn/region";
 import hospitalApi from "~/api/hospital";
 export default {
   async asyncData() {
-    const hosTypeListRequest = await dictApi.getDict(1);
-    const areaListRequest = await regionApi.getRegionList("110100");
-    const hospitalListRequest = await hospitalApi.getHospitalList();
+    const hosTypeListResponse = await dictApi.getDict(1);
+    const areaListResponse = await regionApi.getRegionList("110100");
+    const hospitalListResponse = await hospitalApi.getHospitalList();
 
     return {
-      hostypeList: hosTypeListRequest.data,
-      areaList: areaListRequest.data,
-      hospitalList: hospitalListRequest.data
+      hostypeList: hosTypeListResponse.data,
+      areaList: areaListResponse.data,
+      hospitalList: hospitalListResponse.data
     };
   },
   data() {
