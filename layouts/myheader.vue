@@ -68,7 +68,7 @@ export default {
   methods: {
 
     showInfo() {
-      let token = cookie.get('token')
+      let token = cookie.get('refreshToken')
       if (token) {
         this.name = cookie.get('name')
         this.headimgurl = cookie.get('headimgurl')
@@ -83,6 +83,7 @@ export default {
       if ('/logout' == command) {
         cookie.set('name', '', {domain: 'localhost'})
         cookie.set('token', '', {domain: 'localhost'})
+        cookie.set('refreshToken', '', {domain: 'localhost'})
         cookie.set('headimgurl', '', {domain: 'localhost'})
 
         //跳转页面
