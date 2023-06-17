@@ -101,11 +101,11 @@
                       element-loading-text="文件上传中"
                       class="avatar-uploader"
                       :action="uploadUrl"
-                      :headers="{ token }"
                       :show-file-list="false"
                       :on-progress="onUploadProgress"
                       :on-success="onUploadSuccess"
                       :on-error="onUploadError"
+                      :with-credentials='true'
                     >
                       <div class="upload-inner-wrapper">
                         <img
