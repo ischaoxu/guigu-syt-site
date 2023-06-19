@@ -24,5 +24,27 @@ export default {
             url: `/front/hosp/department/getDeptList/${hoscode}`,
             method: 'get'
         })
-    }
+    },
+    //获取可预约排班日期列表
+    getBookingScheduleRule(hoscode, depcode) {
+        return request({
+            url: `/front/hosp/schedule/getBookingScheduleRule/${hoscode}/${depcode}`,
+            method: 'get'
+        })
+    },
+
+    //获取排班数据
+    getScheduleList(hoscode, depcode, workDate) {
+        return request({
+            url: `/front/hosp/schedule/getScheduleList/${hoscode}/${depcode}/${workDate}`,
+            method: 'get'
+        })
+    },
+    //获取预约详情
+    getScheduleDetail(id) {
+        return request({
+            url: `/front/hosp/schedule/getScheduleDetail/${id}`,
+            method: 'get'
+        })
+    },
 }
