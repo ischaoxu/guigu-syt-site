@@ -51,10 +51,7 @@
             </div>
           </div>
           <div class="right-wrapper">
-            <img
-              src="~/assets/images/code_order_detail.png"
-              class="code-img"
-            />
+            <img src="~/assets/images/code_order_detail.png" class="code-img" />
             <div class="content-wrapper">
               <div>
                 微信<span class="iconfont"></span>关注“北京114预约挂号”
@@ -69,7 +66,7 @@
             <div>挂号信息</div>
           </div>
           <div class="info-form">
-            <el-form >
+            <el-form>
               <el-form-item label="就诊人信息：">
                 <div class="content">
                   <span>{{ orderInfo.patientName }}</span>
@@ -79,7 +76,7 @@
                 <div class="content">
                   <span
                     >{{ orderInfo.reserveDate }}
-                    {{ orderInfo.reserveTime == 0 ? '上午' : '下午' }}</span
+                    {{ orderInfo.reserveTime == 0 ? "上午" : "下午" }}</span
                   >
                 </div>
               </el-form-item>
@@ -139,7 +136,7 @@
             <div class="v-button white" @click="cancelOrder()">取消预约</div>
           </div>
           <div class="button-wrapper ml20" v-if="orderInfo.orderStatus == 0">
-            <div class="v-button" @click="pay()">支付</div>
+            <div class="v-button" @click="pay()">{{ payText }}</div>
           </div>
         </div>
       </div>
@@ -157,7 +154,7 @@
         <div class="operate-view" style="height: 350px">
           <div class="wrapper wechat">
             <div>
-              <img src="二维码链接" alt="" />
+              <qriously :value="codeUrl" :size="220" />
 
               <div
                 style="
@@ -178,36 +175,81 @@
   <!-- footer -->
 </template>
 <script>
-import '~/assets/css/hospital_personal.css'
-import '~/assets/css/hospital.css'
+import "~/assets/css/hospital_personal.css";
+import "~/assets/css/hospital.css";
 
-import orderInfoApi from '~/api/orderInfo'
+import orderInfoApi from "~/api/orderInfo";
+
+import wxpayApi from "~/api/wxpay";
+
 export default {
   data() {
     return {
+      codeUrl: null, //微信支付二维码
+      isPayShow: false, //不显示登录二维码组件
+      payText: "支付",
+
       orderId: null,
       orderInfo: {
-        param: {},
+        param: {}
       },
       dialogPayVisible: false,
       payObj: {},
-      timer: null, // 定时器名称
-    }
+      timer: null // 定时器名称
+    };
   },
 
   mounted() {
-    this.orderId = this.$route.query.orderId
-    this.init()
+    this.orderId = this.$route.query.orderId;
+    this.init();
   },
 
   methods: {
     init() {
-      orderInfoApi.getOrder(this.orderId).then((response) => {
-        this.orderInfo = response.data
-      })
+      orderInfoApi.getOrder(this.orderId).then(response => {
+        this.orderInfo = response.data;
+      });
     },
-  },
-}
+    //发起支付
+    pay() {
+      if (this.isPayShow) return;
+      this.isPayShow = true;
+      this.payText = "支付中.....";
+
+      wxpayApi.nativePay(this.orderInfo.outTradeNo).then(response => {
+        this.codeUrl = response.data;
+        this.dialogPayVisible = true;
+
+        //每隔3秒查单
+        this.timer = setInterval(() => {
+          console.log("轮询查单:" + new Date());
+          this.queryPayStatus();
+        }, 3000);
+      });
+    },
+
+    //查询订单状态
+    queryPayStatus() {
+      wxpayApi.queryPayStatus(this.orderInfo.outTradeNo).then(response => {
+        if (response.code == 250) {
+          return;
+        }
+        //清空定时器
+        clearInterval(this.timer);
+        window.location.reload();
+      });
+    },
+
+    //关闭对话框
+    closeDialog() {
+      //停止定时器
+      clearInterval(this.timer);
+      //恢复支付按钮
+      this.isPayShow = false;
+      this.payText = "支付";
+    }
+  }
+};
 </script>
 <style>
 .info-wrapper {

@@ -30,7 +30,7 @@ service.interceptors.response.use(
                 window.location.href = '/'
             })
 
-        } else if (response.data.code !== 200) {
+        } else if (response.data.code !== 200 && response.data.code !== 250) {
             Message({
                 message: response.data.message,
                 type: 'error',
