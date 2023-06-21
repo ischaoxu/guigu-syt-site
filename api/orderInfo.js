@@ -21,4 +21,11 @@ export default {
             method: `get`
         })
     },
+    //取消预约
+    cancelOrder(outTradeNo) {
+        return request({
+            url: `/front/order/orderInfo/auth/cancelOrder/${outTradeNo}`,
+            method: 'get'
+        })
+    },
 }
