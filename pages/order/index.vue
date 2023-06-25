@@ -46,11 +46,15 @@
           <div class="title" style="margin-bottom:40px;">挂号订单</div>
         </div>
         <div class="table-wrapper table">
-          <el-table :data="orderInfolist" stripe style="width: 100%">
+          <el-table
+            :data="orderInfolist"
+            stripe
+            style="width: 100%"
+          >
             <el-table-column label="就诊时间" width="120">
               <template slot-scope="scope">
                 {{ scope.row.reserveDate }}
-                {{ scope.row.reserveTime === 0 ? '上午' : '下午' }}
+                {{ scope.row.reserveTime === 0 ? "上午" : "下午" }}
               </template>
             </el-table-column>
             <el-table-column prop="hosname" label="医院" width="100">
@@ -82,33 +86,33 @@
   <!-- footer -->
 </template>
 <script>
-import '~/assets/css/hospital_personal.css'
-import '~/assets/css/hospital.css'
-import orderInfoApi from '~/api/orderInfo'
+import "~/assets/css/hospital_personal.css";
+import "~/assets/css/hospital.css";
+import orderInfoApi from "~/api/orderInfo";
 
 export default {
   data() {
     return {
-      orderInfolist: [],
-    }
+      orderInfolist: []
+    };
   },
 
   mounted() {
-    this.orderId = this.$route.query.orderId
-    this.fetchData()
+    this.orderId = this.$route.query.orderId;
+    this.fetchData();
   },
 
   methods: {
     //订单列表
     fetchData() {
-      orderInfoApi.getList().then((response) => {
-        this.orderInfolist = response.data
-      })
+      orderInfoApi.getList().then(response => {
+        this.orderInfolist = response.data;
+      });
     },
 
     show(id) {
-      window.location.href = '/order/show?orderId=' + id
-    },
-  },
-}
+      window.location.href = "/order/show?orderId=" + id;
+    }
+  }
+};
 </script>

@@ -20,5 +20,11 @@ export default {
       method: `get`,
       headers:{token: cookie.get('token')}
     })
-  }
+  },
+  bindPhone(phone, code) {
+    return request({
+        url: `/front/user/userInfo/auth/bindPhone/${phone}/${code}`,
+        method: `post`
+    })
+},
 }
